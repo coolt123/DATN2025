@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\DATN2025\\DATN\\wwwroot\\uploads\\86eb06cf-ecde-4169-bd3f-7af64f06ec21.jpg",
+      "PackagePath": "staticwebassets\\uploads\\86eb06cf-ecde-4169-bd3f-7af64f06ec21.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.DATN.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.DATN.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.DATN.props",
+      "PackagePath": "build\\DATN.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.DATN.props",
+      "PackagePath": "buildMultiTargeting\\DATN.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.DATN.props",
+      "PackagePath": "buildTransitive\\DATN.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
