@@ -54,6 +54,8 @@ namespace DATN.Services.Implements
                 StockQuantity = dto.StockQuantity,
                 CategoryId = dto.CategoryId,
                 CreatedDate = DateTime.UtcNow,
+                MaterialId = dto.MaterialId,
+                StyleId = dto.StyleId,  
                 ProductImages = new List<ProductImage>()
             };
 

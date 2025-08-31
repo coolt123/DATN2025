@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Dtos",
+    "\\Dtos\\ProductDto",
+    "\\Exceptions",
+    "\\Mapping",
+    "\\Services",
+    "\\Services\\Implements",
+    "\\wwwroot",
+    "\\wwwroot\\uploads"
+  ],
+  "SelectedNode": "\\DATN.csproj",
+  "PreviewInSolutionExplorer": false
+}

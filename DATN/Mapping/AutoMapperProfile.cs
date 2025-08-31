@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DATN.Dtos.CartDto;
 using DATN.Dtos.CategoriesDto;
+using DATN.Dtos.OrderDto;
 using DATN.Dtos.ProductDto;
 using DATN.Entities;
 
@@ -26,6 +27,19 @@ namespace DATN.Mapping
             CreateMap<Cart, CartDto>()
                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.NameProduct))
                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price));
+            CreateMap<Order, OrderItemDto>()
+           .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+           .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+           .ForMember(dest => dest.OrderCode, opt => opt.MapFrom(src => src.OrderCode));
+
+            CreateMap<Order, OrderFullDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
+                .ForMember(dest => dest.OrderCode, opt => opt.MapFrom(src => src.OrderCode));
+
+            CreateMap<OrderDetail, OrderDetailItemDto>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.NameProduct));
         }   
     }
 }

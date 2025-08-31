@@ -3,6 +3,7 @@ using DATN.DbContexts;
 using DATN.Dtos.CartDto;
 using DATN.Dtos.CartDto;
 using DATN.Entities;
+using DATN.Exceptions;
 using DATN.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -69,11 +70,11 @@ namespace DATN.Services
         public async Task UpdateQuantityAsync(UpdateCartQuantityDto dto)
         {
             var item = await _context.Carts.FindAsync(dto.CartId);
-            if (item != null)
-            {
-                item.Quantity = dto.Quantity;
-                await _context.SaveChangesAsync();
-            }
+            if (item == null)
+                throw new AppException("Không tìm thấy mục giỏ hàng để cập nhật.", 404);
+
+            item.Quantity = dto.Quantity;
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveFromCartAsync(int cartId)

@@ -9,10 +9,12 @@ namespace DATN.Api.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IVnPayService _vnPayService;
+        private readonly IOrderService _orderService;
 
-        public PaymentController(IVnPayService vnPayService)
+        public PaymentController(IVnPayService vnPayService, IOrderService orderService)
         {
             _vnPayService = vnPayService;
+            _orderService = orderService;
         }
 
         [HttpPost("create-vnpay-url")]
@@ -28,10 +30,29 @@ namespace DATN.Api.Controllers
         }
 
         [HttpGet("vnpay-callback")]
-        public IActionResult PaymentCallbackVnpay()
+        public async Task<IActionResult> PaymentCallbackVnpay()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
-            return Ok(response);
+
+            // Kiểm tra phản hồi từ VNPAY
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                return Redirect($"/payment-fail?code={response?.VnPayResponseCode}");
+            }
+
+            // Lấy OrderId từ vnp_TxnRef
+            if (int.TryParse(response.TxnRef, out int orderId))
+            {
+                var success = await _orderService.MarkOrderAsPaidAsync(orderId);
+
+                if (success)
+                    return Redirect($"/payment-success?orderId={orderId}");
+                else
+                    return Redirect("/payment-fail?reason=update-failed");
+            }
+
+            return Redirect("/payment-fail?reason=invalid-order-id");
         }
     }
 }
+

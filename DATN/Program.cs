@@ -18,6 +18,7 @@ using EmailSender;
 using OfficeOpenXml;
 using DATN.Middleware;
 using DATN.Services;
+using DATN.Filters;
 
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -25,11 +26,15 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args,
     WebRootPath = "wwwroot" 
 });
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers(options =>
 {
-    
+    options.Filters.Add<ResponseWrapperFilter>();
+})
+.AddJsonOptions(options =>
+{
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
 (c =>
@@ -78,6 +83,10 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IProductVectorizer, ProductVectorizer>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 
 

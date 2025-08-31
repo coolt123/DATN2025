@@ -10,5 +10,9 @@
         public int CategoryId { get; set; }
         public List<IFormFile> Images { get; set; }
         public int MainImageIndex { get; set; }
+        public int MaterialId { get; set; }
+        public int StyleId { get; set; }
+
+
     }
 }

@@ -9,6 +9,8 @@
         public int StockQuantity { get; set; }
         public int CategoryId { get; set; }
         public string ImageUrl { get; set; }
+        public string Style { get; set; }
+        public string Material { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CategoryName { get; set; }
         public List<ProductImageDto> Images { get; set; }

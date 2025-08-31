@@ -186,6 +186,28 @@ namespace DATN.Migrations
                     b.ToTable("inventory_logs", (string)null);
                 });
 
+            modelBuilder.Entity("DATN.Entities.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("materials", (string)null);
+                });
+
             modelBuilder.Entity("DATN.Entities.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -197,6 +219,10 @@ namespace DATN.Migrations
                     b.Property<string>("IdUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -329,6 +355,9 @@ namespace DATN.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NameProduct")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -341,9 +370,16 @@ namespace DATN.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("StyleId")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.HasIndex("StyleId");
 
                     b.ToTable("products", (string)null);
                 });
@@ -381,6 +417,39 @@ namespace DATN.Migrations
                     b.ToTable("productimages", (string)null);
                 });
 
+            modelBuilder.Entity("DATN.Entities.ProductView", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(450)");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("product_views", (string)null);
+                });
+
             modelBuilder.Entity("DATN.Entities.Review", b =>
                 {
                     b.Property<int>("ReviewId")
@@ -413,6 +482,28 @@ namespace DATN.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("reviews", (string)null);
+                });
+
+            modelBuilder.Entity("DATN.Entities.Style", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("styles", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Entities.ApplicationUser", b =>
@@ -726,13 +817,40 @@ namespace DATN.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DATN.Entities.Material", "Material")
+                        .WithMany("Products")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DATN.Entities.Style", "Style")
+                        .WithMany("Products")
+                        .HasForeignKey("StyleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Style");
                 });
 
             modelBuilder.Entity("DATN.Entities.ProductImage", b =>
                 {
                     b.HasOne("DATN.Entities.Product", "Product")
                         .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DATN.Entities.ProductView", b =>
+                {
+                    b.HasOne("DATN.Entities.Product", "Product")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -815,6 +933,11 @@ namespace DATN.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("DATN.Entities.Material", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("DATN.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -833,6 +956,11 @@ namespace DATN.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("DATN.Entities.Style", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Identity.Entities.ApplicationUser", b =>

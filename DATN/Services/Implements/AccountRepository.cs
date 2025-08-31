@@ -148,7 +148,8 @@ namespace DATN.Services.Implements
                 AddressLine = model.AddressLine,
                 City = model.City,
                 District = model.District,
-                EmailConfirmed = false
+                EmailConfirmed = false,
+                RefreshToken=null,
             };
 
             var result = await userManager.CreateAsync(user, model.Password);

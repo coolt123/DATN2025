@@ -1,4 +1,5 @@
 ﻿using DATN.Dtos;
+using DATN.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -32,6 +33,11 @@ namespace DATN.Middleware
 
                 switch (ex)
                 {
+                    case AppException appEx:
+                        response.StatusCode = appEx.StatusCode;
+                        responseDto.Status = appEx.StatusCode;
+                        responseDto.Message = appEx.Message;
+                        break;
                     case ValidationException ve:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         responseDto.Status = response.StatusCode;

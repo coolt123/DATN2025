@@ -25,6 +25,10 @@ namespace DATN.DbContexts
         public DbSet<CustomerLoyalty> CustomerLoyalties { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Style> Styles { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<ProductView> ProductViews { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +41,52 @@ namespace DATN.DbContexts
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(true);
+            });
+            modelBuilder.Entity<Style>(e =>
+            {
+                e.ToTable("styles");
+                e.HasKey(s => s.Id);
+                e.Property(s => s.Name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(true);
+
+                e.HasIndex(s => s.Name).IsUnique();
+            }
+            );
+
+
+            modelBuilder.Entity<Material>(e =>
+            {
+                e.ToTable("materials");
+                e.HasKey(m => m.Id);
+                e.Property(m => m.Name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(true);
+
+                e.HasIndex(m => m.Name).IsUnique(); 
+            });
+            modelBuilder.Entity<ProductView>(e =>
+            {
+                e.ToTable("product_views");
+                e.HasKey(pv => pv.Id);
+
+                e.Property(pv => pv.UserId)
+                    .HasMaxLength(450)
+                    .IsUnicode(false);
+
+                e.Property(pv => pv.SessionId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                e.Property(pv => pv.ViewedAt)
+                    .HasDefaultValueSql("GETDATE()");
+
+                e.HasOne(pv => pv.Product)
+                    .WithMany()
+                    .HasForeignKey(pv => pv.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Product>(e =>
@@ -55,6 +105,14 @@ namespace DATN.DbContexts
                    .WithMany(c => c.Products)
                    .HasForeignKey(p => p.CategoryId)
                    .OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(p => p.Material)
+                    .WithMany(m => m.Products)
+                    .HasForeignKey(p => p.MaterialId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(p => p.Style)
+                    .WithMany(s => s.Products)
+                    .HasForeignKey(p => p.StyleId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<ProductImage>(e =>
             {

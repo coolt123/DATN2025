@@ -1,5 +1,6 @@
 ﻿using DATN.Dtos;
 using DATN.Dtos.CategoriesDto;
+using DATN.Helpers;
 using DATN.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -22,12 +23,7 @@ namespace DATN.Controllers
         public async Task<IActionResult> GetAll()
         {
             var data = await _categoryService.GetAllAsync();
-            return Ok(new ResponseDto<object>
-            {
-                Status = (int)HttpStatusCode.OK,
-                Message = "Lấy danh sách danh mục thành công.",
-                Data = data
-            });
+            return ResponseHelper.ResponseSuccess(data, "Lấy danh sách danh mục thành công.");
         }
 
         [HttpGet("{id}")]
@@ -35,21 +31,9 @@ namespace DATN.Controllers
         {
             var data = await _categoryService.GetByIdAsync(id);
             if (data == null)
-            {
-                return NotFound(new ResponseDto<object>
-                {
-                    Status = (int)HttpStatusCode.NotFound,
-                    Message = "Không tìm thấy danh mục.",
-                    Data = null
-                });
-            }
+                return ResponseHelper.ResponseError("Không tìm thấy danh mục.", HttpStatusCode.NotFound);
 
-            return Ok(new ResponseDto<object>
-            {
-                Status = (int)HttpStatusCode.OK,
-                Message = "Lấy thông tin danh mục thành công.",
-                Data = data
-            });
+            return ResponseHelper.ResponseSuccess(data, "Lấy thông tin danh mục thành công.");
         }
 
         [HttpPost]
@@ -57,53 +41,22 @@ namespace DATN.Controllers
         {
             var result = await _categoryService.CreateAsync(dto);
             if (!result)
-            {
-                return BadRequest(new ResponseDto<object>
-                {
-                    Status = (int)HttpStatusCode.BadRequest,
-                    Message = "Tạo danh mục thất bại.",
-                    Data = null
-                });
-            }
+                return ResponseHelper.ResponseError("Tạo danh mục thất bại.", HttpStatusCode.BadRequest);
 
-            return Ok(new ResponseDto<object>
-            {
-                Status = (int)HttpStatusCode.OK,
-                Message = "Tạo danh mục thành công.",
-                Data = null
-            });
+            return ResponseHelper.ResponseSuccess<object>(null, "Tạo danh mục thành công.");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
             if (id != dto.CategoryId)
-            {
-                return BadRequest(new ResponseDto<object>
-                {
-                    Status = (int)HttpStatusCode.BadRequest,
-                    Message = "ID không khớp với danh mục.",
-                    Data = null
-                });
-            }
+                return ResponseHelper.ResponseError("ID không khớp với danh mục.", HttpStatusCode.BadRequest);
 
             var result = await _categoryService.UpdateAsync(dto);
             if (!result)
-            {
-                return NotFound(new ResponseDto<object>
-                {
-                    Status = (int)HttpStatusCode.NotFound,
-                    Message = "Không tìm thấy danh mục để cập nhật.",
-                    Data = null
-                });
-            }
+                return ResponseHelper.ResponseError("Không tìm thấy danh mục để cập nhật.", HttpStatusCode.NotFound);
 
-            return Ok(new ResponseDto<object>
-            {
-                Status = (int)HttpStatusCode.OK,
-                Message = "Cập nhật danh mục thành công.",
-                Data = null
-            });
+            return ResponseHelper.ResponseSuccess<object>(null, "Cập nhật danh mục thành công.");
         }
 
         [HttpDelete("{id}")]
@@ -111,21 +64,9 @@ namespace DATN.Controllers
         {
             var result = await _categoryService.DeleteAsync(id);
             if (!result)
-            {
-                return NotFound(new ResponseDto<object>
-                {
-                    Status = (int)HttpStatusCode.NotFound,
-                    Message = "Không tìm thấy danh mục để xóa.",
-                    Data = null
-                });
-            }
+                return ResponseHelper.ResponseError("Không tìm thấy danh mục để xóa.", HttpStatusCode.NotFound);
 
-            return Ok(new ResponseDto<object>
-            {
-                Status = (int)HttpStatusCode.OK,
-                Message = "Xóa danh mục thành công.",
-                Data = null
-            });
+            return ResponseHelper.ResponseSuccess<object>(null, "Xóa danh mục thành công.");
         }
     }
 }

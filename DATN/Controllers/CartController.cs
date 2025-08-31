@@ -1,15 +1,17 @@
-﻿using DATN.Dtos.CartDto;
+﻿using DATN.Dtos;
+using DATN.Dtos.CartDto;
+using DATN.Exceptions;
+using DATN.Helpers;
 using DATN.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace DATN.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
@@ -21,52 +23,56 @@ namespace DATN.Controllers
 
         private string GetUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                throw new AppException("Vui lòng đăng nhập để có thể xem giỏ hàng.", (int)HttpStatusCode.Unauthorized);
+            return userId;
         }
 
-        // GET: api/cart
         [HttpGet]
         public async Task<IActionResult> GetUserCart()
         {
             var userId = GetUserId();
             var cart = await _cartService.GetUserCartAsync(userId);
-            return Ok(cart);
+            return ResponseHelper.ResponseSuccess(cart, "Lấy giỏ hàng thành công.");
         }
 
-        // POST: api/cart
         [HttpPost]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartDto dto)
         {
             var userId = GetUserId();
             await _cartService.AddToCartAsync(userId, dto);
-            return Ok(new { message = "Thêm vào giỏ hàng thành công." });
+            return ResponseHelper.ResponseSuccess<object>(null, "Thêm vào giỏ hàng thành công.");
         }
 
-        // PUT: api/cart/update-quantity
         [HttpPut("update-quantity")]
         public async Task<IActionResult> UpdateQuantity([FromBody] UpdateCartQuantityDto dto)
         {
             await _cartService.UpdateQuantityAsync(dto);
-            return Ok(new { message = "Cập nhật số lượng thành công." });
+            return ResponseHelper.ResponseSuccess<object>(null, "Cập nhật số lượng thành công.");
         }
 
-        // DELETE: api/cart/product/5
         [HttpDelete("product/{productId}")]
-        public async Task<IActionResult> RemoveFromCart(int productId)
+        public async Task<IActionResult> RemoveFromCartByProduct(int productId)
         {
             var userId = GetUserId();
             await _cartService.RemoveFromCartAsync(userId, productId);
-            return Ok(new { message = "Đã xoá sản phẩm khỏi giỏ hàng." });
+            return ResponseHelper.ResponseSuccess<object>(null, "Đã xoá sản phẩm khỏi giỏ hàng.");
         }
 
-        // DELETE: api/cart
+        [HttpDelete("item/{cartId}")]
+        public async Task<IActionResult> RemoveFromCartById(int cartId)
+        {
+            await _cartService.RemoveFromCartAsync(cartId);
+            return ResponseHelper.ResponseSuccess<object>(null, "Đã xoá mục khỏi giỏ hàng.");
+        }
+
         [HttpDelete]
         public async Task<IActionResult> ClearCart()
         {
             var userId = GetUserId();
             await _cartService.ClearCartAsync(userId);
-            return Ok(new { message = "Đã xoá toàn bộ giỏ hàng." });
+            return ResponseHelper.ResponseSuccess<object>(null, "Đã xoá toàn bộ giỏ hàng.");
         }
     }
 }
-

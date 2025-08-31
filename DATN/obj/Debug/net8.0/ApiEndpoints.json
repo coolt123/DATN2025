@@ -148,7 +148,23 @@
   },
   {
     "ContainingType": "DATN.Controllers.CartController",
-    "Method": "RemoveFromCart",
+    "Method": "RemoveFromCartById",
+    "RelativePath": "api/Cart/item/{cartId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cartId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.CartController",
+    "Method": "RemoveFromCartByProduct",
     "RelativePath": "api/Cart/product/{productId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -252,6 +268,96 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "CreateOrder",
+    "RelativePath": "api/Orders",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "DATN.Dtos.OrderDto.CreateOrderWithPaymentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "GetOrderDetail",
+    "RelativePath": "api/Orders/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "GetAllOrders",
+    "RelativePath": "api/Orders/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "Search",
+    "RelativePath": "api/Orders/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "GetByStatus",
+    "RelativePath": "api/Orders/status",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "value",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.OrdersController",
+    "Method": "GetByUser",
+    "RelativePath": "api/Orders/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -436,8 +542,60 @@
         "Name": "MainImageIndex",
         "Type": "System.Int32",
         "IsRequired": false
+      },
+      {
+        "Name": "MaterialId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "StyleId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.ProductViewController",
+    "Method": "LogView",
+    "RelativePath": "api/ProductView",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "DATN.Entities.ProductView",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.RecommendationController",
+    "Method": "RecommendForGuest",
+    "RelativePath": "api/Recommendation/guest",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DATN.Controllers.RecommendationController",
+    "Method": "RecommendForUser",
+    "RelativePath": "api/Recommendation/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
